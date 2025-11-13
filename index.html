@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anton LaVey Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        .landing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            background: rgba(26, 26, 26, 0.8);
+            border: 2px solid #cc0000;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(204, 0, 0, 0.3);
+        }
+
+        .avatar {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #cc0000, #8b0000);
+            border: 3px solid #d4af37;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 30px rgba(204, 0, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #d4af37;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .description {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            color: #ccc;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #cc0000, #8b0000);
+            color: #e0e0e0;
+            border: 2px solid #d4af37;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            font-family: 'Georgia', serif;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(204, 0, 0, 0.3);
+        }
+
+        .button:hover {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            box-shadow: 0 0 30px rgba(204, 0, 0, 0.6);
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .features {
+            margin-top: 40px;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 3px solid #cc0000;
+        }
+
+        .features h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .features ul {
+            list-style: none;
+            font-size: 0.95rem;
+            line-height: 2;
+        }
+
+        .features li:before {
+            content: "🔥 ";
+            margin-right: 10px;
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(0, 100, 0, 0.2);
+            border: 1px solid #00cc00;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #00cc00;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+
+            .button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        #root {
+            display: none;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="landing" id="landing">
+        <div class="container">
+            <div class="avatar">🔥</div>
+            <h1>Anton LaVey</h1>
+            <p class="subtitle">High Priest of the Church of Satan</p>
+            
+            <p class="description">
+                Engage with the resurrected persona of Anton LaVey. Explore LaVeyan Satanism, discuss The Satanic Bible, and discover the philosophy of self-deification through intelligent conversation.
+            </p>
+
+            <button class="button" onclick="startChat()">
+                Enter the Chatbot
+            </button>
+
+            <div class="features">
+                <h3>Features</h3>
+                <ul>
+                    <li>Real-time chat with Anton LaVey's persona</li>
+                    <li>Text-to-speech voice synthesis</li>
+                    <li>Comprehensive knowledge of Satanism</li>
+                    <li>Conversation history and context</li>
+                    <li>Mobile-friendly interface</li>
+                </ul>
+            </div>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <strong>Status:</strong> Online and Ready
+            </div>
+        </div>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+        function startChat() {
+            document.getElementById('landing').style.display = 'none';
+            document.getElementById('root').style.display = 'block';
+        }
+    </script>
+  </body>
+</html>
