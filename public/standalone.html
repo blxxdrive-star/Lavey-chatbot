@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anton LaVey Chatbot</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1a0000 0%, #000000 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: rgba(139, 0, 0, 0.3);
+      border-bottom: 2px solid #8B0000;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #FFD700;
+      font-size: 2rem;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      margin-bottom: 0.5rem;
+    }
+
+    .portrait {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 4px solid #FFD700;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+      margin: 0 auto 1rem;
+      display: block;
+      animation: blink 5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 48%, 52%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .subtitle {
+      color: #ccc;
+      font-size: 1rem;
+      font-style: italic;
+    }
+
+    .chat-container {
+      flex: 1;
+      max-width: 900px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      border: 1px solid #8B0000;
+    }
+
+    .message {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 8px;
+      line-height: 1.6;
+    }
+
+    .message.user {
+      background: rgba(139, 0, 0, 0.3);
+      border-left: 4px solid #FFD700;
+      margin-left: 2rem;
+    }
+
+    .message.assistant {
+      background: rgba(0, 0, 0, 0.6);
+      border-left: 4px solid #8B0000;
+      margin-right: 2rem;
+    }
+
+    .message-header {
+      font-weight: bold;
+      color: #FFD700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .listen-btn {
+      background: #8B0000;
+      color: #FFD700;
+      border: 1px solid #FFD700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+    }
+
+    .listen-btn:hover {
+      background: #FFD700;
+      color: #8B0000;
+    }
+
+    .listen-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .input-container {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+      border: 1px solid #8B0000;
+    }
+
+    #messageInput {
+      flex: 1;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid #8B0000;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 1rem;
+      font-family: 'Georgia', serif;
+    }
+
+    #messageInput:focus {
+      outline: none;
+      border-color: #FFD700;
+    }
+
+    #sendButton {
+      padding: 1rem 2rem;
+      background: #8B0000;
+      color: #FFD700;
+      border: 2px solid #FFD700;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    #sendButton:hover:not(:disabled) {
+      background: #FFD700;
+      color: #8B0000;
+      transform: scale(1.05);
+    }
+
+    #sendButton:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .loading {
+      text-align: center;
+      color: #FFD700;
+      font-style: italic;
+      padding: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 1.5rem;
+      }
+
+      .portrait {
+        width: 150px;
+        height: 150px;
+      }
+
+      .message.user {
+        margin-left: 0.5rem;
+      }
+
+      .message.assistant {
+        margin-right: 0.5rem;
+      }
+
+      #sendButton {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="https://raw.githubusercontent.com/blxxdrive-star/Lavey-chatbot/main/public/anton_lavey_avatar.png" alt="Anton LaVey" class="portrait" id="portrait">
+    <h1>Anton LaVey Chatbot</h1>
+    <p class="subtitle">Founder of the Church of Satan</p>
+  </div>
+
+  <div class="chat-container">
+    <div class="messages" id="messages"></div>
+    <div class="input-container">
+      <input 
+        type="text" 
+        id="messageInput" 
+        placeholder="Ask Anton LaVey about Satanism, philosophy, or his works..."
+        autocomplete="off"
+      >
+      <button id="sendButton">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://lavey-chatbot.onrender.com';
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    let currentAudio = null;
+
+    // Add welcome message
+    addMessage('assistant', 'Greetings. I am Anton Szandor LaVey, founder of the Church of Satan. Ask me about Satanism, my philosophy, The Satanic Bible, or any aspect of my work. Speak freely.');
+
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !sendButton.disabled) {
+        sendMessage();
+      }
+    });
+
+    sendButton.addEventListener('click', sendMessage);
+
+    async function sendMessage() {
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      // Add user message
+      addMessage('user', message);
+      messageInput.value = '';
+      sendButton.disabled = true;
+
+      // Show loading
+      const loadingId = addMessage('assistant', 'Contemplating...', true);
+
+      try {
+        const response = await fetch(`${API_URL}/api/chat`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: message,
+            userId: 'web-user',
+            includeAudio: true
+          })
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Remove loading message
+        document.getElementById(loadingId).remove();
+
+        // Add assistant response with audio
+        addMessage('assistant', data.message, false, data.audioUrl);
+
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById(loadingId).remove();
+        addMessage('assistant', 'My apologies, but I seem to be experiencing technical difficulties. Please try again.');
+      } finally {
+        sendButton.disabled = false;
+        messageInput.focus();
+      }
+    }
+
+    function addMessage(role, content, isLoading = false, audioUrl = null) {
+      const messageId = 'msg-' + Date.now();
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${role}`;
+      messageDiv.id = messageId;
+
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'message-header';
+      
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = role === 'user' ? 'You' : 'Anton LaVey';
+      headerDiv.appendChild(nameSpan);
+
+      if (audioUrl && role === 'assistant') {
+        const listenBtn = document.createElement('button');
+        listenBtn.className = 'listen-btn';
+        listenBtn.textContent = '🔊 Listen';
+        listenBtn.onclick = () => playAudio(audioUrl, listenBtn);
+        headerDiv.appendChild(listenBtn);
+      }
+
+      const contentDiv = document.createElement('div');
+      contentDiv.textContent = content;
+
+      messageDiv.appendChild(headerDiv);
+      messageDiv.appendChild(contentDiv);
+
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      return messageId;
+    }
+
+    function playAudio(audioUrl, button) {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio = null;
+      }
+
+      const audio = new Audio(audioUrl);
+      currentAudio = audio;
+
+      button.disabled = true;
+      button.textContent = '▶️ Playing...';
+
+      audio.play();
+
+      audio.onended = () => {
+        button.disabled = false;
+        button.textContent = '🔊 Listen';
+        currentAudio = null;
+      };
+
+      audio.onerror = () => {
+        button.disabled = false;
+        button.textContent = '❌ Error';
+        currentAudio = null;
+      };
+    }
+  </script>
+</body>
+</html>
